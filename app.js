@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-const moviesRoute = require("./routes/movies.routes");
+const moviesRoute = require("./src/routes/movies.routes");
 
 PORT = 3000;
 const server = express();
