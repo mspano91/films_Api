@@ -27,8 +27,9 @@ const controllerMovies = async () => {
   try {
     const response = await axios.get(`${API_URL}/${type}/movie`, { params });
     const moviesData = response.data.results.map((movie) => {
-      const { adult, backdrop_path, vote_count, ...rest } = movie;
-      return rest;
+      const { adult, backdrop_path, vote_count, release_date, ...rest } = movie;
+      const formattedReleaseDate = new Date(release_date).toISOString(); //aca hay un problema con el dato proporcionado de la fecha entonces lo modificamos para que lo guarde la base de datos
+      return { ...rest, release_date: formattedReleaseDate };
     });
     console.log(moviesData);
     return moviesData;
@@ -37,4 +38,25 @@ const controllerMovies = async () => {
   }
 };
 
-module.exports = { controllerCategories, controllerMovies };
+const controllerTrailers = async (movieId) => {
+  try {
+    const trailers = await axios.get(`${API_URL}/movie/${movieId}`, {
+      params: {
+        api_key: API_KEY,
+        append_to_response: "videos",
+      },
+    });
+    console.log(trailers);
+    if (trailers.data.videos && trailers.data.videos.results) {
+      const trailer = trailers.data.videos.results.find(
+        (vid) => vid.name === "Official Trailer"
+      );
+
+      return trailer;
+    }
+  } catch (error) {
+    console.error("Error fetching official trailer:", error);
+  }
+};
+
+module.exports = { controllerCategories, controllerMovies, controllerTrailers };
