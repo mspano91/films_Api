@@ -7,6 +7,14 @@ const {
 
 const handlerCategories = async (req, res) => {
   try {
+    // Intenta obtener la información de la base de datos
+    const existingCategories = await prisma.categories.findMany();
+
+    if (existingCategories.length > 0) {
+      // Si hay datos en la base de datos, retorna esos datos
+      return res.status(200).json(existingCategories);
+    }
+
     const categories = await controllerCategories();
 
     const categoriesData = categories.genres.map((category) => ({
@@ -30,9 +38,18 @@ const handlerCategories = async (req, res) => {
 
 const handlerMovies = async (req, res) => {
   try {
-    const moviesList = await controllerMovies();
-    console.log(moviesList);
+    // Intenta obtener la información de la base de datos
+    const existingMovies = await prisma.movies.findMany();
 
+    if (existingMovies.length > 0) {
+      // Si hay datos en la base de datos, retorna esos datos
+      return res.status(200).json(existingMovies);
+    }
+
+    // Si no hay datos en la base de datos, realiza la petición a la URL
+    const moviesList = await controllerMovies();
+
+    // Guarda la información en la base de datos
     const moviesData = moviesList.map((movies) => ({
       id: movies.id,
       original_language: movies.original_language,
@@ -49,8 +66,10 @@ const handlerMovies = async (req, res) => {
 
     await prisma.movies.createMany({
       data: moviesData,
-      skipDuplicates: true, // Ignora duplicados en caso de que algunos ya existan
+      skipDuplicates: true,
     });
+
+    // Retorna los datos obtenidos de la URL
     return res.status(200).json(moviesList);
   } catch (error) {
     return res.status(400).json({ error: error.message });
