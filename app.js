@@ -3,7 +3,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const moviesRoute = require("./src/routes/movies.routes");
 
-PORT = 3000;
+PORT = 3002;
 const server = express();
 
 server.use(express.json());
