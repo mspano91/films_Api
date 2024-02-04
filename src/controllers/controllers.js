@@ -40,15 +40,15 @@ const controllerMovies = async () => {
 
 const controllerTrailers = async (movieId) => {
   try {
-    const trailers = await axios.get(`${API_URL}/movie/${movieId}`, {
+    const response = await axios.get(`${API_URL}/movie/${movieId}`, {
       params: {
         api_key: API_KEY,
         append_to_response: "videos",
       },
     });
-    console.log(trailers);
-    if (trailers.data.videos && trailers.data.videos.results) {
-      const trailer = trailers.data.videos.results.find(
+
+    if (response.data.videos && response.data.videos.results) {
+      const trailer = response.data.videos.results.find(
         (vid) => vid.name === "Official Trailer"
       );
 
