@@ -27,7 +27,7 @@ const controllerMovies = async () => {
   try {
     const response = await axios.get(`${API_URL}/${type}/movie`, { params });
     const moviesData = response.data.results.map((movie) => {
-      const { adult, backdrop_path, vote_count, release_date, ...rest } = movie;
+      const { adult, vote_count, release_date, ...rest } = movie;
       const formattedReleaseDate = new Date(release_date).toISOString(); //aca hay un problema con el dato proporcionado de la fecha entonces lo modificamos para que lo guarde la base de datos
       return { ...rest, release_date: formattedReleaseDate };
     });
@@ -47,15 +47,36 @@ const controllerTrailers = async (movieId) => {
       },
     });
 
-    if (response.data.videos && response.data.videos.results) {
-      const trailer = response.data.videos.results.find(
+    if (
+      response.data.videos &&
+      response.data.videos.results &&
+      response.data.videos.results.length > 0
+    ) {
+      const trailers = response.data.videos.results;
+
+      const officialTrailer = trailers.find(
         (vid) => vid.name === "Official Trailer"
       );
 
-      return trailer;
+      if (officialTrailer) {
+        console.log("Reproduciendo el tráiler oficial:", officialTrailer);
+        return officialTrailer;
+      } else {
+        // Si no se encuentra el tráiler oficial, reproducir el primer tráiler
+        const firstTrailer = trailers.length > 0 ? trailers[0] : null;
+
+        if (firstTrailer) {
+          console.log("Reproduciendo el primer tráiler:", firstTrailer);
+          return firstTrailer;
+        } else {
+          console.log("No se encontraron tráilers disponibles.");
+          return null; // O cualquier valor por defecto que desees devolver
+        }
+      }
     }
   } catch (error) {
-    console.error("Error fetching official trailer:", error);
+    console.error("Error fetching trailers:", error);
+    return null;
   }
 };
 

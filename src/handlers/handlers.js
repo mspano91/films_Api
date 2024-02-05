@@ -57,6 +57,7 @@ const handlerMovies = async (req, res) => {
       overview: movies.overview,
       popularity: movies.popularity,
       poster_path: movies.poster_path,
+      backdrop_path: movies.backdrop_path,
       release_date: movies.release_date,
       title: movies.title,
       video: movies.video,
@@ -81,7 +82,8 @@ const handlerMovies = async (req, res) => {
 
 const handlerTrailers = async (req, res) => {
   try {
-    const movieId = req.query.id;
+    const movieId = req.body.id;
+    console.log(movieId);
     if (!movieId) {
       return res
         .status(400)
@@ -91,7 +93,7 @@ const handlerTrailers = async (req, res) => {
     const trailer = await controllerTrailers(movieId);
 
     if (trailer) {
-      return res.status(200).json(trailer);
+      return res.status(200).json([trailer]);
     } else {
       return res.status(404).json({ error: "Trailer not found" });
     }
