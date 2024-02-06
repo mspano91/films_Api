@@ -39,6 +39,7 @@ const controllerMovies = async () => {
 };
 
 const controllerTrailers = async (movieId) => {
+  console.log(`controlador ${movieId}`);
   try {
     const response = await axios.get(`${API_URL}/movie/${movieId}`, {
       params: {

@@ -9,6 +9,6 @@ const moviesRoute = Router();
 
 moviesRoute.get("/cat", handlerCategories);
 moviesRoute.get("/movies", handlerMovies);
-moviesRoute.get("/trailer", handlerTrailers);
+moviesRoute.get("/trailer/:id", handlerTrailers);
 
 module.exports = moviesRoute;

@@ -82,8 +82,8 @@ const handlerMovies = async (req, res) => {
 
 const handlerTrailers = async (req, res) => {
   try {
-    const movieId = req.body.id;
-    console.log(movieId);
+    const movieId = req.params.id;
+    console.log(`soy el handler ${movieId}`);
     if (!movieId) {
       return res
         .status(400)
@@ -92,8 +92,10 @@ const handlerTrailers = async (req, res) => {
 
     const trailer = await controllerTrailers(movieId);
 
+    console.log(`como vuelve la info al handler ${trailer}`);
+
     if (trailer) {
-      return res.status(200).json([trailer]);
+      return res.status(200).json(trailer);
     } else {
       return res.status(404).json({ error: "Trailer not found" });
     }
