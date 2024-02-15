@@ -3,6 +3,7 @@ const {
   controllerCategories,
   controllerMovies,
   controllerTrailers,
+  getMoviesByCategory,
 } = require("../controllers/controllers");
 
 const handlerCategories = async (req, res) => {
@@ -80,6 +81,32 @@ const handlerMovies = async (req, res) => {
   }
 };
 
+const handlerCatbyId = async (req, res) => {
+  try {
+    const movieId = req.params.id;
+    console.log(`soy el CATBYID ${movieId}`);
+    const list = await getMoviesByCategory(movieId);
+    const moviesData = list.map((movies) => ({
+      id: movies.id,
+      original_language: movies.original_language,
+      original_title: movies.original_title,
+      overview: movies.overview,
+      popularity: movies.popularity,
+      poster_path: movies.poster_path,
+      backdrop_path: movies.backdrop_path,
+      release_date: movies.release_date,
+      title: movies.title,
+      video: movies.video,
+      vote_average: movies.vote_average,
+      genre_ids: movies.genre_ids,
+    }));
+
+    return res.status(200).json(moviesData);
+  } catch {
+    return res.status(400).json(error(error.message));
+  }
+};
+
 const handlerTrailers = async (req, res) => {
   try {
     const movieId = req.params.id;
@@ -103,4 +130,9 @@ const handlerTrailers = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-module.exports = { handlerCategories, handlerMovies, handlerTrailers };
+module.exports = {
+  handlerCategories,
+  handlerMovies,
+  handlerTrailers,
+  handlerCatbyId,
+};
