@@ -98,26 +98,26 @@ const controllerTrailers = async (movieId) => {
   }
 };
 
-// const controllerTrailersCat = async (movieId) => {
-//   console.log(`controlador del trailer ${movieId}`);
-//   try {
-//     const response = await axios.get(`${API_URL}/movie/${movieId}`, {
-//       params: {
-//         api_key: API_KEY,
-//         append_to_response: "videos",
-//       },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error fetching trailers:", error);
-//     return null;
-//   }
-// };
+const controllerTrailersCat = async (movieId) => {
+  console.log(`controlador del trailer ${movieId}`);
+  try {
+    const response = await axios.get(`${API_URL}/movie/${movieId}`, {
+      params: {
+        api_key: API_KEY,
+        append_to_response: "videos",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching trailers:", error);
+    return null;
+  }
+};
 
 module.exports = {
   controllerCategories,
   controllerMovies,
   controllerTrailers,
   getMoviesByCategory,
-  // controllerTrailersCat,
+  controllerTrailersCat,
 };
