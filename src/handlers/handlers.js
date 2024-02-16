@@ -4,6 +4,7 @@ const {
   controllerMovies,
   controllerTrailers,
   getMoviesByCategory,
+  controllerTrailersCat,
 } = require("../controllers/controllers");
 
 const handlerCategories = async (req, res) => {
@@ -130,9 +131,34 @@ const handlerTrailers = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+// const handlerTrailersByCat = async (req, res) => {
+//   try {
+//     const movieId = req.params.id;
+//     console.log(`soy el handler ${movieId}`);
+//     if (!movieId) {
+//       return res
+//         .status(400)
+//         .json({ error: "Missing movie ID in query parameters" });
+//     }
+
+//     const trailer = await controllerTrailersCat(movieId);
+
+//     console.log(`como vuelve la info al handler ${trailer}`);
+
+//     if (trailer) {
+//       return res.status(200).json(trailer);
+//     } else {
+//       return res.status(404).json({ error: "Trailer not found" });
+//     }
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
 module.exports = {
   handlerCategories,
   handlerMovies,
   handlerTrailers,
   handlerCatbyId,
+  // handlerTrailersByCat,
 };
