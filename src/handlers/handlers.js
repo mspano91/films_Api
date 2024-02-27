@@ -38,6 +38,30 @@ const handlerCategories = async (req, res) => {
   }
 };
 
+const handlerSearchMovies = async (req, res) => {
+  try {
+    const searchKey = req.params.searchKey;
+    const moviesList = await controllerMovies(searchKey);
+    const moviesData = moviesList.map((movies) => ({
+      id: movies.id,
+      original_language: movies.original_language,
+      original_title: movies.original_title,
+      overview: movies.overview,
+      popularity: movies.popularity,
+      poster_path: movies.poster_path,
+      backdrop_path: movies.backdrop_path,
+      release_date: movies.release_date,
+      title: movies.title,
+      video: movies.video,
+      vote_average: movies.vote_average,
+      genre_ids: movies.genre_ids,
+    }));
+    return res.status(200).json(moviesData);
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+};
+
 const handlerMovies = async (req, res) => {
   try {
     // Intenta obtener la información de la base de datos
@@ -49,7 +73,8 @@ const handlerMovies = async (req, res) => {
     }
 
     // Si no hay datos en la base de datos, realiza la petición a la URL
-    const moviesList = await controllerMovies();
+    const searchKey = req.params.searchKey;
+    const moviesList = await controllerMovies(searchKey);
 
     // Guarda la información en la base de datos
     const moviesData = moviesList.map((movies) => ({
@@ -161,4 +186,5 @@ module.exports = {
   handlerTrailers,
   handlerCatbyId,
   handlerTrailersByCat,
+  handlerSearchMovies,
 };

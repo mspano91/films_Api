@@ -35,10 +35,18 @@ const getMoviesByCategory = async (genreId) => {
   }
 };
 
-const controllerMovies = async () => {
-  const type = "discover";
+const controllerMovies = async (searchKey, category) => {
+  // const type = "discover";
+  // const params = {
+  //   api_key: API_KEY,
+  // };
+  console.log(searchKey);
+  console.log(category);
+  const type = searchKey ? "search" : "discover";
   const params = {
     api_key: API_KEY,
+    query: searchKey,
+    ...(category && { with_genres: category }),
   };
 
   try {
